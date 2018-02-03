@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include <GL/glut.h>
 #include <aruco/aruco.h>
 #include <opencv2/videoio.hpp>
@@ -18,6 +19,7 @@ bool TheCaptureFlag = true;
 void displayFunction();
 void idleFunction();
 void axis(float);
+int gl_init();
 void onKeyboard(unsigned char Key, int x, int y);
 void onMouse(int b, int s, int x, int y);
 void readCameraParams(cv::Mat &camera_matrix, cv::Mat &dist_coeffs, int &width, int &height);
@@ -25,18 +27,10 @@ void readCameraParams(cv::Mat &camera_matrix, cv::Mat &dist_coeffs, int &width, 
 int main(int argc, char **argv) {
     glutInit(&argc, argv);
 
-    // Read video
-    TheVideoCapturer.open(0);
-    if (!TheVideoCapturer.isOpened()) {
-        std::cerr << "Could not open video" << std::endl;
-        return -1;
-    }
-
     // read camera parameters
     readCameraParams(TheCameraParams.CameraMatrix, TheCameraParams.Distorsion, TheCameraParams.CamSize.width,
                      TheCameraParams.CamSize.height);
     TheGlWindowSize = TheCameraParams.CamSize;
-
 
     //double buffering used to avoid flickering problem in animation
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
@@ -44,7 +38,17 @@ int main(int argc, char **argv) {
 
     // create the window
     glutCreateWindow("AruCo");
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+
+    // gl init to be called only after context/screen creation
+    if (gl_init()==-1)
+        return -1;
+
+    // Read video
+    TheVideoCapturer.open(0);
+    if (!TheVideoCapturer.isOpened()) {
+        std::cerr << "Could not open video" << std::endl;
+        return -1;
+    }
 
     //Assign  the function used in events
     glutDisplayFunc(displayFunction);
@@ -209,4 +213,27 @@ void onKeyboard(unsigned char Key, int x, int y){
         case 27:
             exit(EXIT_SUCCESS);
     };
+}
+
+int gl_init(){
+    // Initialize GLEW
+    glewExperimental = GL_TRUE; // Needed for core profile
+
+    if (glewInit() != GLEW_OK) {
+        fprintf(stderr, "Failed to initialize GLEW\n");
+        getchar();
+        return -1;
+    }
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+    // Enable depth test
+    glEnable(GL_DEPTH_TEST);
+    // Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
+
+    // Cull triangles which normal is not towards the camera
+    glEnable(GL_CULL_FACE);
+
+    return 0;
 }

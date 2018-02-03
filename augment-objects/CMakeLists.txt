@@ -7,6 +7,12 @@ set(CMAKE_CXX_STANDARD 11)
 find_package(OpenCV REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
+find_package(GLEW REQUIRED)
+
+if (GLEW_FOUND)
+    include_directories(${GLEW_INCLUDE_DIRS})
+    link_libraries(${GLEW_LIBRARIES})
+endif()
 
 add_executable(aug-skull main.cpp)
 
@@ -16,4 +22,4 @@ link_directories(/home/akshay/Projects/vision/aruco_src/lib/)
 
 include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
 
-target_link_libraries(aug-skull ${OpenCV_LIBS} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} aruco)
+target_link_libraries(aug-skull ${OpenCV_LIBS} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} aruco ${GLEW_LIBRARIES})
