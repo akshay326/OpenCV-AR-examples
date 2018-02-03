@@ -14,7 +14,10 @@ if (GLEW_FOUND)
     link_libraries(${GLEW_LIBRARIES})
 endif()
 
-add_executable(aug-skull main.cpp)
+add_executable(aug-skull
+        main.cpp
+        render.cpp
+        render.h)
 
 # Adding local ARUco Library
 include_directories(/home/akshay/Projects/vision/aruco_src/include/)

@@ -4,7 +4,10 @@
 #include <opencv2/videoio.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv/cv.hpp>
+#include "render.h"
 
+
+// OpenCV + ArUco variables
 GLfloat ratioX,ratioY;
 aruco::MarkerDetector PPDetector;
 aruco::MarkerPoseTracker markerPoseTracker;
@@ -16,10 +19,26 @@ cv::Size TheGlWindowSize;
 bool TheCaptureFlag = true;
 
 
+// IDs need to free up resources
+GLuint vertexbuffer;
+GLuint normalbuffer;
+GLuint elementbuffer;
+GLuint programID;
+GLuint Texture;
+GLuint VertexArrayID;
+
+//std::vector<unsigned short> indices;
+//std::vector<glm::vec3> indexed_vertices;
+//std::vector<glm::vec3> indexed_normals;
+//std::vector<glm::vec3> vertices;
+//std::vector<glm::vec3> normals;
+
 void displayFunction();
 void idleFunction();
 void axis(float);
 int gl_init();
+int loadObjectModels();
+void gl_exit();
 void onKeyboard(unsigned char Key, int x, int y);
 void onMouse(int b, int s, int x, int y);
 void readCameraParams(cv::Mat &camera_matrix, cv::Mat &dist_coeffs, int &width, int &height);
@@ -41,14 +60,17 @@ int main(int argc, char **argv) {
 
     // gl init to be called only after context/screen creation
     if (gl_init()==-1)
-        return -1;
+        gl_exit();
 
     // Read video
     TheVideoCapturer.open(0);
     if (!TheVideoCapturer.isOpened()) {
         std::cerr << "Could not open video" << std::endl;
-        return -1;
+        gl_exit();
     }
+
+    if (loadObjectModels() == -1)
+        gl_exit();
 
     //Assign  the function used in events
     glutDisplayFunc(displayFunction);
@@ -58,6 +80,33 @@ int main(int argc, char **argv) {
 
     //Let start glut loop
     glutMainLoop();
+
+    return 0;
+}
+
+void gl_exit(){
+    // Cleanup VBO and shader
+    glDeleteBuffers(1, &vertexbuffer);
+    glDeleteBuffers(1, &normalbuffer);
+    glDeleteBuffers(1, &elementbuffer);
+    glDeleteProgram(programID);
+    glDeleteTextures(1, &Texture);
+    glDeleteVertexArrays(1, &VertexArrayID);
+
+    exit(EXIT_FAILURE);
+}
+
+int loadObjectModels(){
+    // Read our .obj file
+//    if (!loadOBJ("skull.obj", vertices, normals))
+//        return -1;
+//
+//    indexVBO(vertices, normals, indices, indexed_vertices, indexed_normals, 0.35f);
+//
+//    // At this point normals and vertices are of no use now
+//    vertices.clear();
+//    normals.clear();
+//    std::cout << indexed_vertices.size() << " number of vertices to display\n";
 
     return 0;
 }
