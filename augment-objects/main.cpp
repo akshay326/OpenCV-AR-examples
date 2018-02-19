@@ -1,10 +1,19 @@
 #include <GL/glew.h>
-#include <GL/glut.h>
+
+// Include GLFW
+#include <GLFW/glfw3.h>
+
 #include <aruco/aruco.h>
 #include <opencv2/videoio.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv/cv.hpp>
 #include "render.h"
+#include "common/shader.hpp"
+#include "common/texture.hpp"
+
+
+// Main Window
+GLFWwindow *window;
 
 // OpenCV + ArUco variables
 GLfloat ratioX,ratioY;
@@ -36,55 +45,53 @@ std::vector<cv::Point3d> normals;
 void displayFunction();
 void idleFunction();
 void axis(float);
-int gl_init();
+int glew_init();
+int glfw_init();
+void glfw_exit();
 int loadObjectModels();
-int gl_exit();
-void onKeyboard(unsigned char Key, int x, int y);
-void onMouse(int b, int s, int x, int y);
+void loadSkull();
+void resizeCallback(GLFWwindow*, int,int);
+void onKeyboard(GLFWwindow*);
 void readCameraParams(cv::Mat &camera_matrix, cv::Mat &dist_coeffs, int &width, int &height);
 
 int main(int argc, char **argv) {
-    glutInit(&argc, argv);
-
     // read camera parameters
     readCameraParams(TheCameraParams.CameraMatrix, TheCameraParams.Distorsion, TheCameraParams.CamSize.width,
                      TheCameraParams.CamSize.height);
     TheGlWindowSize = TheCameraParams.CamSize;
 
-    //double buffering used to avoid flickering problem in animation
-    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-    glutInitWindowSize(TheCameraParams.CamSize.width, TheCameraParams.CamSize.height);
+    if (glfw_init()==-1) // Needs CamSize
+        return -1;
 
-    // create the window
-    glutCreateWindow("AruCo");
-
-    // gl init to be called only after context/screen creation
-    if (gl_init()==-1)
-        return gl_exit();
+    if (glew_init()==-1) // gl init to be called only after context/screen creation
+        glfw_exit();
 
     // Read video
     TheVideoCapturer.open(0);
     if (!TheVideoCapturer.isOpened()) {
         std::cerr << "Could not open video" << std::endl;
-        return gl_exit();
+        glfw_exit();
     }
 
     if (loadObjectModels() == -1)
-        return gl_exit();
+        glfw_exit();
 
+    onKeyboard(window);
     //Assign  the function used in events
-    glutDisplayFunc(displayFunction);
-    glutIdleFunc(idleFunction);
-    glutKeyboardFunc(onKeyboard);
-    glutMouseFunc(onMouse);
+//    glutDisplayFunc(displayFunction);
+//    glutIdleFunc(idleFunction);
 
-    //Let start glut loop
-    glutMainLoop();
+    // Main Loop
+    while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0) {
+        idleFunction();
+        displayFunction();
+    }
 
-    return 0;
+    glfw_exit();
+    return EXIT_SUCCESS;
 }
 
-int gl_exit(){
+void glfw_exit(){
     // Cleanup VBO and shader
     glDeleteBuffers(1, &vertexbuffer);
     glDeleteBuffers(1, &normalbuffer);
@@ -93,7 +100,8 @@ int gl_exit(){
     glDeleteTextures(1, &Texture);
     glDeleteVertexArrays(1, &VertexArrayID);
 
-    return EXIT_FAILURE;
+    // Close OpenGL window and terminate GLFW
+    glfwTerminate();
 }
 
 int loadObjectModels(){
@@ -135,7 +143,8 @@ void idleFunction() {
 
     // resize the image to the size of the GL window
     cv::resize(TheUndInputImage, TheResizedImage, TheCameraParams.CamSize);
-    glutPostRedisplay();
+    glfwPostEmptyEvent();
+//    glutPostRedisplay();
 }
 
 void readCameraParams(cv::Mat &camera_matrix, cv::Mat &dist_coeffs, int &width, int &height) {
@@ -149,11 +158,6 @@ void readCameraParams(cv::Mat &camera_matrix, cv::Mat &dist_coeffs, int &width, 
     fs["distortion_coefficients"] >> dist_coeffs;
     fs["image_width"] >> width;
     fs["image_height"] >> height;
-}
-
-void onMouse(int b, int s, int x, int y) {
-    if (b == GLUT_LEFT_BUTTON && s == GLUT_DOWN)
-        TheCaptureFlag = !TheCaptureFlag;
 }
 
 void axis(float size) {
@@ -191,17 +195,24 @@ inline void drawLine(){
 
 inline void drawBackground(){
     // draw image in the buffer
-    glDisable(GL_DEPTH_TEST);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, TheGlWindowSize.width, 0, TheGlWindowSize.height, -1.0, 1.0);
-    glViewport(0, 0, TheGlWindowSize.width, TheGlWindowSize.height);
-    glDisable(GL_TEXTURE_2D);
-    glPixelZoom(1, -1);
-    glRasterPos3f(0, TheGlWindowSize.height - 0.5, -1.0);
-    glDrawPixels(TheGlWindowSize.width, TheGlWindowSize.height, GL_RGB, GL_UNSIGNED_BYTE, TheResizedImage.ptr(0));
+//
+//
+//    // Give the image to OpenGL
+//    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, TheGlWindowSize.width, TheGlWindowSize.height, 0, GL_BGR, GL_UNSIGNED_BYTE, TheResizedImage.data);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+//    glDisable(GL_DEPTH_TEST);
+//    glMatrixMode(GL_MODELVIEW);
+//    glLoadIdentity();
+//    glMatrixMode(GL_PROJECTION);
+//    glLoadIdentity();
+//    glOrtho(0, TheGlWindowSize.width, 0, TheGlWindowSize.height, -1.0, 1.0);
+//    glViewport(0, 0, TheGlWindowSize.width, TheGlWindowSize.height);
+//    glDisable(GL_TEXTURE_2D);
+//    glPixelZoom(1, -1);
+//    glRasterPos3f(0, TheGlWindowSize.height - 0.5, -1.0);
+//    glDrawPixels(TheGlWindowSize.width, TheGlWindowSize.height, GL_RGB, GL_UNSIGNED_BYTE, TheResizedImage.ptr(0));
 }
 
 inline void drawObjectsOnMarkers(){
@@ -233,7 +244,7 @@ inline void drawObjectsOnMarkers(){
         // TODO Small changes in Rvec shud be ignored
         glRotated(cv::norm(TheMarker.Rvec)*57.13,TheMarker.Rvec.at<float>(0),-TheMarker.Rvec.at<float>(1),-TheMarker.Rvec.at<float>(2));
         glColor3f(1, 0.4, 0.4);
-        glTranslatef(0, 0, 0);
+        loadSkull();
         axis(TheMarkerSize);
         glPopMatrix();
     }
@@ -244,27 +255,28 @@ void displayFunction() {
     if (TheResizedImage.rows == 0)  // prevent from going on until the image is initialized
         return;
 
-    // clear
+    // Clear the screen
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Use our shader
+    glUseProgram(programID);
 
     if (TheCaptureFlag) // for debugging purposes
         drawBackground();
     drawObjectsOnMarkers();
 
-    glutSwapBuffers();
+    // Swap buffers
+    glfwSwapBuffers(window);
+    glfwPollEvents();
 }
 
-void onKeyboard(unsigned char Key, int x, int y){
-    switch(Key)    {
-        case 'o':
-            TheCaptureFlag = !TheCaptureFlag;
-            break;
-        case 27:
-            exit(EXIT_SUCCESS);
-    };
+void onKeyboard(GLFWwindow *window){
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
 }
 
-int gl_init(){
+int glew_init(){
     // Initialize GLEW
     glewExperimental = GL_TRUE; // Needed for core profile
 
@@ -273,16 +285,59 @@ int gl_init(){
         getchar();
         return -1;
     }
+}
 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+void loadSkull(){
+    glGenVertexArrays(1, &VertexArrayID);
+    glBindVertexArray(VertexArrayID);
 
-    // Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
+    // Create and compile our GLSL program from the shaders
+    programID = LoadShaders("StandardShading.vertexshader", "StandardShading.fragmentshader");
 
-    // Cull triangles which normal is not towards the camera
-    glEnable(GL_CULL_FACE);
+    // Get a handle for our "MVP" uniform
+    auto MatrixID = (GLuint) glGetUniformLocation(programID, "MVP");
+    auto ViewMatrixID = (GLuint) glGetUniformLocation(programID, "V");
+    auto ModelMatrixID = (GLuint) glGetUniformLocation(programID, "M");
+
+    // Load the texture
+    Texture = loadDDS("uvmap.DDS");
+
+    // Get a handle for our "myTextureSampler" uniform
+    auto TextureID = (GLuint) glGetUniformLocation(programID, "myTextureSampler");
+}
+
+int glfw_init(){
+    // Initialise GLFW
+    if (!glfwInit()) {
+        fprintf(stderr, "Failed to initialize GLFW\n");
+        getchar();
+        return -1;
+    }
+
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // Open a window and create its OpenGL context
+    window = glfwCreateWindow(TheGlWindowSize.width, TheGlWindowSize.height, "ArUco", nullptr, nullptr);
+    if (window == nullptr) {
+        fprintf(stderr,
+                "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
+        getchar();
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+
+    // Ensure we can capture the escape key being pressed below
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    glfwSetFramebufferSizeCallback(window, resizeCallback);
 
     return 0;
+}
+
+void resizeCallback(GLFWwindow* window, int width, int height){
+    glViewport(0, 0, width, height);
 }
