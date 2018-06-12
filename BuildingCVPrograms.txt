@@ -1,0 +1,10 @@
+1. Write your CV Program
+2. Add a CMakeLists.txt file to the directory(refer any program in examples directory)
+3. Bash `mkdir build; cd build; cmake ..; make`
+4. Run `./main` or `./<your-main-program>`
+
+.. Installing ARUco
+The author clearly states installing it locally ,not as system root. Just make cmake -> cmake .. -DCMAKE_INSTALL_PREFIX=<pathToInstall>, where u gotta mention the path to installation
+
+.. Camera Callib
+Use `./aruco_calibration live0 out.yml` in ~aruco304/build/utils_calibration. Present the grid in the same directory and hit a 4 times and finally hit Esc. `out.yml` is the desired file u want

@@ -1,0 +1,4 @@
+/home/akshay/Downloads/clion-2017.3.1/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/akshay/Projects/vision/examples/aug-skull
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/akshay/Projects/vision/examples/aug-skull/cmake-build-debug

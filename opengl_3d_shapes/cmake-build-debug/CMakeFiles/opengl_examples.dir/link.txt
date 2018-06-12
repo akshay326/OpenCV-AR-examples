@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/opengl_examples.dir/main.cpp.o CMakeFiles/opengl_examples.dir/models.cpp.o  -o opengl_examples /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libglut.so /usr/lib/x86_64-linux-gnu/libXmu.so /usr/lib/x86_64-linux-gnu/libXi.so 

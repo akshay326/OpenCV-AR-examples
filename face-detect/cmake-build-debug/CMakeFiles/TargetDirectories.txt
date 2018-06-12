@@ -1,0 +1,3 @@
+/home/akshay/Projects/vision/examples/face-detect/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/akshay/Projects/vision/examples/face-detect/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/akshay/Projects/vision/examples/face-detect/cmake-build-debug/CMakeFiles/face_detect.dir

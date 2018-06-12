@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/akshay/Projects/vision/examples/opengl_3d_shapes/main.cpp
+GL/glut.h
+-
+models.cpp
+/home/akshay/Projects/vision/examples/opengl_3d_shapes/models.cpp
+
+/home/akshay/Projects/vision/examples/opengl_3d_shapes/models.cpp
+GL/gl.h
+-
+GL/glut.h
+-
+cmath
+-
+vector
+-
+iostream
+-
+

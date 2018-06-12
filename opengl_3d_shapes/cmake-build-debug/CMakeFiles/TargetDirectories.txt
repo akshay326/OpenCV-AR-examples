@@ -1,0 +1,3 @@
+/home/akshay/Projects/vision/examples/opengl_3d_shapes/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/akshay/Projects/vision/examples/opengl_3d_shapes/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/akshay/Projects/vision/examples/opengl_3d_shapes/cmake-build-debug/CMakeFiles/opengl_examples.dir
