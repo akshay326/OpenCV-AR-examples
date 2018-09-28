@@ -1,6 +1,6 @@
-/home/akshay/Downloads/clion-2017.3.1/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/akshay/Projects/vision/examples/show_skull
--- The C compiler identification is GNU 5.4.0
--- The CXX compiler identification is GNU 5.4.0
+/home/akshay/Downloads/clion-2018.1.4/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/akshay/Projects/vision/OpenCV-AR/show_skull
+-- The C compiler identification is GNU 7.3.0
+-- The CXX compiler identification is GNU 7.3.0
 -- Check for working C compiler: /usr/bin/cc
 -- Check for working C compiler: /usr/bin/cc -- works
 -- Detecting C compiler ABI info
@@ -13,9 +13,15 @@
 -- Detecting CXX compiler ABI info - done
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Found OpenGL: /usr/lib/x86_64-linux-gnu/libGL.so  
+-- Found OpenGL: /usr/lib/x86_64-linux-gnu/libOpenGL.so   
 -- Found GLUT: /usr/lib/x86_64-linux-gnu/libglut.so  
--- Found GLEW: /usr/include  
--- Configuring done
--- Generating done
--- Build files have been written to: /home/akshay/Projects/vision/examples/show_skull/cmake-build-debug
+CMake Error at /home/akshay/Downloads/clion-2018.1.4/bin/cmake/share/cmake-3.10/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+  Could NOT find GLEW (missing: GLEW_LIBRARY)
+Call Stack (most recent call first):
+  /home/akshay/Downloads/clion-2018.1.4/bin/cmake/share/cmake-3.10/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+  /home/akshay/Downloads/clion-2018.1.4/bin/cmake/share/cmake-3.10/Modules/FindGLEW.cmake:38 (find_package_handle_standard_args)
+  CMakeLists.txt:9 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/akshay/Projects/vision/OpenCV-AR/show_skull/cmake-build-debug/CMakeFiles/CMakeOutput.log".

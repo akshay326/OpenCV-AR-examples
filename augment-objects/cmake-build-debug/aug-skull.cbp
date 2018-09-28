@@ -44,6 +44,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add option="-DGLFW_DLL"/>
 					<Add directory="/home/akshay/Projects/vision/aruco_src/include"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/usr/local/include/opencv"/>
@@ -69,6 +70,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add option="-DGLFW_DLL"/>
 					<Add directory="/home/akshay/Projects/vision/aruco_src/include"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/usr/local/include/opencv"/>
@@ -118,16 +120,22 @@
 		<Unit filename="/home/akshay/Projects/vision/OpenCV-AR/augment-objects/../../../../../../usr/local/share/OpenCV/OpenCVConfig.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\share\OpenCV\"/>
 		</Unit>
+		<Unit filename="/home/akshay/Projects/vision/OpenCV-AR/augment-objects/../../../../../../usr/local/share/OpenCV/OpenCVModules-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		</Unit>
 		<Unit filename="/home/akshay/Projects/vision/OpenCV-AR/augment-objects/../../../../../../usr/local/share/OpenCV/OpenCVModules.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\share\OpenCV\"/>
 		</Unit>
-		<Unit filename="/home/akshay/Projects/vision/OpenCV-AR/augment-objects/../../../../../../usr/local/share/OpenCV/OpenCVModules-release.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		<Unit filename="/home/akshay/Projects/vision/OpenCV-AR/augment-objects/../../../../../../usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\glfw3\"/>
 		</Unit>
 		<Unit filename="/home/akshay/Projects/vision/OpenCV-AR/augment-objects/../../../../../../usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3ConfigVersion.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\glfw3\"/>
 		</Unit>
-		<Unit filename="/home/akshay/Projects/vision/OpenCV-AR/augment-objects/../../../../../../usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Config.cmake">
+		<Unit filename="/home/akshay/Projects/vision/OpenCV-AR/augment-objects/../../../../../../usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Targets-none.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\glfw3\"/>
+		</Unit>
+		<Unit filename="/home/akshay/Projects/vision/OpenCV-AR/augment-objects/../../../../../../usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Targets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\glfw3\"/>
 		</Unit>
 	</Project>

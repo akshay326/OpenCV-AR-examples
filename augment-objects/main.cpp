@@ -340,4 +340,4 @@ int glfw_init(){
 
 void resizeCallback(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
-}
+}0
